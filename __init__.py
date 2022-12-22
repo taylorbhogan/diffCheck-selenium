@@ -37,8 +37,8 @@ def executeDiffChecking():
 	driver = webdriver.Chrome()
 	driver.get('https://www.diffchecker.com/excel-compare/')
 
-	originalDirectoryPath = os.fsencode('/Users/chefables_imac/Desktop/automation/test_files/dev')
-	changedDirectoryPath = os.fsencode('/Users/chefables_imac/Desktop/automation/test_files/prod')
+	originalDirectoryPath = os.fsencode('/Users/chefables_imac/Desktop/automated-testing/test_files/dev')
+	changedDirectoryPath = os.fsencode('/Users/chefables_imac/Desktop/automated-testing/test_files/prod')
 
 	originalExcelDocuments = sorted(list(filter(lambda val: os.fsdecode(os.path.splitext(val)[1]) == '.xlsx', os.listdir(originalDirectoryPath))))
 	changedExcelDocuments = sorted(list(filter(lambda val: os.fsdecode(os.path.splitext(val)[1]) == '.xlsx', os.listdir(changedDirectoryPath))))
@@ -74,5 +74,38 @@ def executeDiffChecking():
 
 		print("workbook complete")
 	print("script finished executing")
+	# try:
+	# 	sender = "tbhdevtools@gmail.com" # replace with sender's email address
+	# 	receiver = "tbhdevtools@gmail.com" # replace with receiver's email address
+	# 	password = "GdGFT9&dyc8b6@tpE6NB48NY" # replace with your password
+	# 	host = 'smtp.gmail.com' # replace with your host, e.g. gmail = smtp.gmail.com
+	# 	port = 465 # replace with your port, e.g. gmail = 465
+
+	# 	s = smtplib.SMTP_SSL(host, port)
+	# 	s.login(sender, password)
+
+	# 	html_mail = """<meta charset="UTF-8">
+	# 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	# 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	# 	<title>Test1</title>
+	# 	<h1> Email Title </h1>
+	# 	<p> Email Content </p>
+	# 	"""
+
+	# 	msg = MIMEMultipart('alternative')
+	# 	msg['Subject'] = f"Test Automated Email" # replace with your subject 
+	# 	msg['From'] = sender
+	# 	msg['To'] = receiver
+
+	# 	html = html_mail
+	# 	part2 = MIMEText(html, 'html')
+
+	# 	msg.attach(part2)
+
+	# 	s.sendmail(sender, receiver, msg.as_string())
+
+	# 	s.quit()
+	# except:
+	# 	print("emailing failed")
 
 executeDiffChecking()
