@@ -6,21 +6,21 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def executeDiffChecking():
-	def _handleFailure(driver, file_name, sheet_index, error=""):
+	def _handleFailure(driver, file_name, sheet_index, sheetName="", error=""):
 		if not os.path.exists(f'./screenshots/{file_name}'):
 			os.mkdir(f'./screenshots/{file_name}')
 
 		driver.get_screenshot_as_file(f'./screenshots/{file_name}/{time.time_ns()}-{os.path.splitext(file_name)[0]}-sheetIdx-{sheet_index}{error}.png')
 		with open('./failures.txt', 'a') as file:
 			file.write('\n')
-			file.write(f'{file_name}-sheetIdx:{sheet_index}-{error}')
+			file.write(f'{file_name}-sheetIdx:{sheet_index}-{error}-sheetName:{sheetName}')
 
-	def _handleSuccess(file_name, sheet_index):
+	def _handleSuccess(file_name, sheet_index, sheetName):
 		with open('./successes.txt', 'a') as file:
 			file.write('\n')
-			file.write(f'{file_name}-sheetIdx:{sheet_index}')
+			file.write(f'{file_name}-sheetIdx:{sheet_index}-sheetName:{sheetName}')
 
-	def _findDifference(driver, file_name, sheet_index):
+	def _findDifference(driver, file_name, sheet_index, sheetName=""):
 		submitButton = WebDriverWait(driver, 15).until(
 			EC.presence_of_element_located((By.NAME, "Find difference"))
 		)
@@ -28,9 +28,9 @@ def executeDiffChecking():
 
 		try:
 			driver.switch_to.alert.accept()
-			_handleSuccess(file_name, sheet_index)
+			_handleSuccess(file_name, sheet_index, sheetName)
 		except:
-			_handleFailure(driver, file_name, sheet_index)
+			_handleFailure(driver, file_name, sheet_index, sheetName)
 
 
 
@@ -66,8 +66,10 @@ def executeDiffChecking():
 
 				sheetNameSelects[1].click()
 				optionsRight[sheet_idx].click()
+				
+				sheetName = optionsRight[sheet_idx].get_attribute("textContent")
 
-				_findDifference(driver, os.fsdecode(changedExcelDocuments[idx]), sheet_idx)
+				_findDifference(driver, os.fsdecode(changedExcelDocuments[idx]), sheet_idx, sheetName)
 				sheet_idx += 1
 		else:
 			_handleFailure(driver=driver, file_name=os.fsdecode(changedExcelDocuments[idx]), sheet_index=sheet_idx, error="NUM SHEETS MISMATCH")
